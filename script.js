@@ -189,69 +189,93 @@ porchLamp.position.set(1.1,8.5,2.4);
 lighthouse.add(porchLamp);
 
 //
-// Steps
+// Stone Steps
 //
 
-const stepGeo=new THREE.BoxGeometry(1.6,.2,.7);
-
-for(let i=0;i<3;i++){
+for(let i=0;i<5;i++){
 
     const step=new THREE.Mesh(
-        stepGeo,
+
+        new THREE.BoxGeometry(
+            1.8-i*.15,
+            .18,
+            .55
+        ),
+
         new THREE.MeshStandardMaterial({
-            color:0x666666
+            color:0x777777
         })
+
     );
 
+
     step.position.set(
+
         0,
-        7+.2*i,
-        2.8+.35*i
+
+        6.2+i*.18,
+
+        3-i*.35
+
     );
+
 
     lighthouse.add(step);
 
 }
 
 //
-// Windows
+// Windows (8 around lighthouse)
 //
 
-const windowMat=new THREE.MeshStandardMaterial({
+const windowMat = new THREE.MeshStandardMaterial({
 
     color:0xffd78f,
 
     emissive:0xffb84d,
 
-    emissiveIntensity:1.5
+    emissiveIntensity:2
 
 });
 
+
 for(let i=0;i<8;i++){
 
-    const win=new THREE.Mesh(
+    const angle = i * Math.PI/4;
 
-        new THREE.BoxGeometry(.45,.7,.06),
+    const win = new THREE.Mesh(
+
+        new THREE.BoxGeometry(.45,.8,.08),
 
         windowMat
 
     );
 
-    const angle=i*Math.PI/4;
 
-    const radius=1.72;
+    const radius = 1.85;
+
 
     win.position.set(
 
         Math.sin(angle)*radius,
 
-        9+i*1.45,
+        15,
 
         Math.cos(angle)*radius
 
     );
 
-    win.lookAt(0,win.position.y,0);
+
+    win.lookAt(
+
+        win.position.x*2,
+
+        15,
+
+        win.position.z*2
+
+    );
+
 
     lighthouse.add(win);
 
@@ -471,25 +495,216 @@ beacon.position.y=24.2;
 
 lighthouse.add(beacon);
 
-/////////////////////////////////////////////////
-// Lantern
-/////////////////////////////////////////////////
+//
+// Detailed Porch Lantern
+//
 
-const glow = new THREE.PointLight(0xffeeaa,8,45);
+const lantern = new THREE.Group();
 
-glow.position.set(0,17.2,0);
 
-scene.add(glow);
+//
+// Metal frame
+//
 
-/////////////////////////////////////////////////
-// Stars
-/////////////////////////////////////////////////
+const metalMat = new THREE.MeshStandardMaterial({
+    color:0x333333,
+    metalness:.8,
+    roughness:.4
+});
+
+
+// top cap
+
+const lanternTop = new THREE.Mesh(
+
+    new THREE.CylinderGeometry(.25,.32,.08,16),
+
+    metalMat
+
+);
+
+lanternTop.position.y=.65;
+
+lantern.add(lanternTop);
+
+
+// bottom cap
+
+const lanternBottom = new THREE.Mesh(
+
+    new THREE.CylinderGeometry(.32,.25,.08,16),
+
+    metalMat
+
+);
+
+lanternBottom.position.y=-.65;
+
+lantern.add(lanternBottom);
+
+
+//
+// Glass body
+//
+
+const glass = new THREE.Mesh(
+
+    new THREE.CylinderGeometry(
+        .25,
+        .25,
+        1.1,
+        16
+    ),
+
+    new THREE.MeshPhysicalMaterial({
+
+        color:0xffdd88,
+
+        emissive:0xffaa33,
+
+        emissiveIntensity:2,
+
+        transparent:true,
+
+        opacity:.7,
+
+        roughness:0
+
+    })
+
+);
+
+lantern.add(glass);
+
+
+//
+// Vertical metal bars
+//
+
+for(let i=0;i<4;i++){
+
+    const bar = new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+            .03,
+            1.2,
+            .03
+        ),
+
+        metalMat
+
+    );
+
+    const angle=i*Math.PI/2;
+
+    bar.position.set(
+
+        Math.sin(angle)*.25,
+
+        0,
+
+        Math.cos(angle)*.25
+
+    );
+
+    lantern.add(bar);
+
+}
+
+
+//
+// Hanging hook
+//
+
+const hook = new THREE.Mesh(
+
+    new THREE.TorusGeometry(
+        .15,
+        .025,
+        8,
+        16
+    ),
+
+    metalMat
+
+);
+
+hook.rotation.x=Math.PI/2;
+
+hook.position.y=.8;
+
+lantern.add(hook);
+
+
+//
+// Light inside lantern
+//
+
+const porchLamp = new THREE.PointLight(
+
+    0xffbb66,
+
+    3,
+
+    10
+
+);
+
+lantern.add(porchLamp);
+
+
+
+//
+// Position lantern beside door
+//
+
+lantern.position.set(
+    1.1,
+    8.7,
+    2.45
+);
+
+
+lighthouse.add(lantern);
+
+
+//
+// Star field
+//
+
+const starCanvas=document.createElement("canvas");
+
+starCanvas.width=32;
+starCanvas.height=32;
+
+const starCtx=starCanvas.getContext("2d");
+
+starCtx.beginPath();
+
+starCtx.arc(
+    16,
+    16,
+    10,
+    0,
+    Math.PI*2
+);
+
+starCtx.fillStyle="white";
+
+starCtx.fill();
+
+
+const starTexture=new THREE.CanvasTexture(
+    starCanvas
+);
+
 
 const starGeo=new THREE.BufferGeometry();
 
 const starCount=3000;
 
 const verts=[];
+
 
 for(let i=0;i<starCount;i++){
 
@@ -505,10 +720,18 @@ for(let i=0;i<starCount;i++){
 
 }
 
+
 starGeo.setAttribute(
+
     "position",
-    new THREE.Float32BufferAttribute(verts,3)
+
+    new THREE.Float32BufferAttribute(
+        verts,
+        3
+    )
+
 );
+
 
 const stars=new THREE.Points(
 
@@ -516,13 +739,18 @@ const stars=new THREE.Points(
 
     new THREE.PointsMaterial({
 
-        color:0xffffff,
+        map:starTexture,
 
-        size:.6
+        transparent:true,
+
+        size:1.2,
+
+        depthWrite:false
 
     })
 
 );
+
 
 scene.add(stars);
 
