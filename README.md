@@ -1,4 +1,4 @@
-# Guiding Light
+# Guiding Light v0.1
 Guiding Light is a cozy, atmospheric exploration game where you play as the keeper of a lonely lighthouse perched on windswept cliffs.
 
 To sailors, the lighthouse is a beacon that keeps ships safe from the rocks.
