@@ -181,12 +181,12 @@ lighthouse.add(leftFrame,rightFrame,topFrame);
 
 for(let i=0;i<5;i++){
 
-    const step=new THREE.Mesh(
+    const step = new THREE.Mesh(
 
         new THREE.BoxGeometry(
-            1.8-i*.15,
-            .18,
-            .55
+            2.0 - i*0.2,
+            0.2,
+            0.6
         ),
 
         new THREE.MeshStandardMaterial({
@@ -195,17 +195,15 @@ for(let i=0;i<5;i++){
 
     );
 
-
     step.position.set(
 
         0,
 
-        6.2+i*.18,
+        5.0 + i*0.2,
 
-        3-i*.35
+        4.2 - i*0.45
 
     );
-
 
     lighthouse.add(step);
 
@@ -239,7 +237,7 @@ for(let i=0;i<8;i++){
     );
 
 
-    const radius = 1.85;
+    const radius = 2.32;
 
 
     win.position.set(
@@ -255,11 +253,11 @@ for(let i=0;i<8;i++){
 
     win.lookAt(
 
-        win.position.x*2,
+        win.position.x*3,
 
         15,
 
-        win.position.z*2
+        win.position.z*3
 
     );
 
