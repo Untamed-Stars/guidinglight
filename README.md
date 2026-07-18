@@ -16,4 +16,16 @@ Explore moonlit cliffs, quiet beaches, hidden caves, and peaceful forests while 
 - 🌙 Experience dynamic weather including clear nights, rain, fog, storms, and meteor showers.
 - 📖 Discover the history of the lighthouse and uncover the mystery of the "heavy sky."
 - ✨ Relax in a combat-free experience focused on exploration, kindness, and quiet moments.
-- 🎵 Immerse yourself in a peaceful world with ambient music, ocean waves, and a sky full of stars. 
+- 🎵 Immerse yourself in a peaceful world with ambient music, ocean waves, and a sky full of stars.
+
+## Built With
+- HTML5
+- CSS3
+- JavaScript (ES Modules)
+- Three.js
+
+## Vision
+Guiding Light is designed to be a slow-paced, story-rich experience that encourages players to slow down, explore, and appreciate the small moments. Rather than fighting monsters or racing against time, the game celebrates curiosity, compassion, and the simple act of helping others.
+
+Sometimes, changing the world begins with helping a single tired star find its way home.
+
