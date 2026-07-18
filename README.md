@@ -9,9 +9,11 @@ Every night, stars fall from the heavens, exhausted after their endless journey 
 
 Explore moonlit cliffs, quiet beaches, hidden caves, and peaceful forests while uncovering the mystery behind why more stars fall with each passing night.
 
-## 📋 Table of Contents
-- [Features](#-features)
-- [Tech Stack](#%EF%B8%8F-tech-stack)
-- [Getting Started](#%EF%B8%8F-getting-started)
-- [Project Roadmap](#%EF%B8%8F-project-roadmap)
-- [License](#-license)
+## Features
+- ⭐ Rescue and care for fallen stars, each with their own personality and stories.
+- 🌊 Explore a handcrafted island filled with hidden paths, caves, and peaceful scenery.
+- 🏮 Restore and upgrade a beautiful lighthouse that serves as both your home and sanctuary.
+- 🌙 Experience dynamic weather including clear nights, rain, fog, storms, and meteor showers.
+- 📖 Discover the history of the lighthouse and uncover the mystery of the "heavy sky."
+- ✨ Relax in a combat-free experience focused on exploration, kindness, and quiet moments.
+- 🎵 Immerse yourself in a peaceful world with ambient music, ocean waves, and a sky full of stars. 
