@@ -1,4 +1,10 @@
 # Guiding Light
-Guiding Light is a cozy exporation game where the sky is heavy from all the space junk humanity has sent into our skies. The stars are tired from holding the sky up all the time, and so they come down to Earth to rest.
+Guiding Light is a cozy, atmospheric exploration game where you play as the keeper of a lonely lighthouse perched on windswept cliffs.
 
-Your job is to find these stars and bring them back to the lighthouse where they can recuperate.
+To sailors, the lighthouse is a beacon that keeps ships safe from the rocks.
+
+But that isn't its true purpose.
+
+Every night, stars fall from the heavens, exhausted after their endless journey across the sky. Your role is to venture into the darkness, rescue these weary travelers, and bring them back to the warmth of the lighthouse. There, they recover their strength, share stories of distant galaxies, forgotten constellations, and the ever-growing weight of the sky before returning home through the great lighthouse lens.
+
+Explore moonlit cliffs, quiet beaches, hidden caves, and peaceful forests while uncovering the mystery behind why more stars fall with each passing night.
