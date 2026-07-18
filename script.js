@@ -176,19 +176,6 @@ topFrame.position.set(0,8.9,2.3);
 lighthouse.add(leftFrame,rightFrame,topFrame);
 
 //
-// Lantern beside door
-//
-
-const porchLamp=new THREE.PointLight(
-    0xffcc88,
-    2,
-    8
-);
-
-porchLamp.position.set(1.1,8.5,2.4);
-lighthouse.add(porchLamp);
-
-//
 // Stone Steps
 //
 
@@ -770,9 +757,13 @@ function animate(){
 
     camera.position.z=Math.cos(time)*22;
 
-    camera.lookAt(0,9,0);
+    camera.lookAt(
+    lighthouse.position.x,
+    15,
+    lighthouse.position.z
+    );
 
-    glow.intensity=6+Math.sin(time*12);
+    beacon.intensity = 10 + Math.sin(time*8)*1.5;
 
     ocean.geometry.attributes.position.needsUpdate=true;
 
