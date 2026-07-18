@@ -237,7 +237,7 @@ for(let i=0;i<8;i++){
     );
 
 
-    const radius = 2.32;
+    const radius = 2.22;
 
 
     win.position.set(
