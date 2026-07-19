@@ -209,60 +209,161 @@ for(let i=0;i<5;i++){
 
 }
 
-//
-// Windows (8 around lighthouse)
-//
+/////////////////////////////////////////////////
+// Spiral Lighthouse Windows
+/////////////////////////////////////////////////
 
-const windowMat = new THREE.MeshStandardMaterial({
+const windowGroup = new THREE.Group();
+lighthouse.add(windowGroup);
 
-    color:0xffd78f,
-
-    emissive:0xffb84d,
-
-    emissiveIntensity:2
-
+const stoneMaterial = new THREE.MeshStandardMaterial({
+    color: 0x8f8f8f,
+    roughness: 0.95
 });
 
+const woodMaterial = new THREE.MeshStandardMaterial({
+    color: 0x5b3b24,
+    roughness: 0.85
+});
 
-for(let i=0;i<8;i++){
+const glassMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffe2b3,
+    emissive: 0xffbb66,
+    emissiveIntensity: 2.2,
+    transparent: true,
+    opacity: 0.95
+});
 
-    const angle = i * Math.PI/4;
+const towerHeight = 15;
+const bottomRadius = 2.3;
+const topRadius = 1.6;
 
-    const win = new THREE.Mesh(
+const windowCount = 8;
 
-        new THREE.BoxGeometry(.45,.8,.08),
+for(let i = 0; i < windowCount; i++){
 
-        windowMat
+    const windowAssembly = new THREE.Group();
 
-    );
+    //
+    // Stone Frame
+    //
 
+    const frame = new THREE.Mesh(
 
-    const radius = 1.92;
+        new THREE.BoxGeometry(0.9,1.25,0.18),
 
-
-    win.position.set(
-
-        Math.sin(angle)*radius,
-
-        15,
-
-        Math.cos(angle)*radius
-
-    );
-
-
-    win.lookAt(
-
-        win.position.x*3,
-
-        15,
-
-        win.position.z*3
+        stoneMaterial
 
     );
 
+    windowAssembly.add(frame);
 
-    lighthouse.add(win);
+    //
+    // Wooden Frame
+    //
+
+    const woodFrame = new THREE.Mesh(
+
+        new THREE.BoxGeometry(0.72,1.05,0.08),
+
+        woodMaterial
+
+    );
+
+    woodFrame.position.z = 0.055;
+
+    windowAssembly.add(woodFrame);
+
+    //
+    // Glass
+    //
+
+    const glass = new THREE.Mesh(
+
+        new THREE.PlaneGeometry(0.56,0.88),
+
+        glassMaterial
+
+    );
+
+    glass.position.z = 0.101;
+
+    windowAssembly.add(glass);
+
+    //
+    // Stone Sill
+    //
+
+    const sill = new THREE.Mesh(
+
+        new THREE.BoxGeometry(1.0,0.08,0.22),
+
+        stoneMaterial
+
+    );
+
+    sill.position.set(0,-0.67,0.02);
+
+    windowAssembly.add(sill);
+
+    //
+    // Warm Interior Light
+    //
+
+    const light = new THREE.PointLight(
+        0xffc67a,
+        0.4,
+        2
+    );
+
+    light.position.z = -0.25;
+
+    windowAssembly.add(light);
+
+    /////////////////////////////////////////////////////
+    // Spiral Placement
+    /////////////////////////////////////////////////////
+
+    // Evenly spaced from bottom to top
+    const t = i / (windowCount - 1);
+
+    const y = 9 + t * 12;
+
+    // 1.5 turns around the lighthouse
+    const angle = t * Math.PI * 3;
+
+    // Radius of tapered tower at this height
+    const localY = y - 7;
+
+    const towerRadius =
+        bottomRadius -
+        (bottomRadius - topRadius) *
+        (localY / towerHeight);
+
+    const radius = towerRadius + 0.08;
+
+    windowAssembly.position.set(
+
+        Math.sin(angle) * radius,
+
+        y,
+
+        Math.cos(angle) * radius
+
+    );
+
+    // Face directly away from the tower
+    windowAssembly.lookAt(
+
+        windowAssembly.position.x * 3,
+
+        y,
+
+        windowAssembly.position.z * 3
+
+    );
+
+    windowGroup.add(windowAssembly);
 
 }
 
