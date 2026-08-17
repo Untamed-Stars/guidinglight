@@ -248,6 +248,7 @@ const windowCount = 8;
 for(let i = 0; i < windowCount; i++){
 
     const windowAssembly = new THREE.Group();
+    };
 
     //
     // Stone Frame
