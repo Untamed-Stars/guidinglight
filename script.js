@@ -576,29 +576,33 @@ vaneArrow.position.y=27.6;
 lighthouse.add(vaneArrow);
 
 //
+//
 // Main Beacon
 //
 
-// Glowing light inside the lantern room.
 const beacon = new THREE.PointLight(
     0xfff1b5,
-    8,
-    60
+    10,
+    70
 );
 
-beacon.position.y = 24.2;
+beacon.position.set(
+    0,
+    24.2,
+    0
+);
 
 lighthouse.add(beacon);
 
 
-// Sweeping visible beam.
+// Sweeping beam
 const beamMaterial = new THREE.MeshBasicMaterial({
 
     color:0xfff3c4,
 
     transparent:true,
 
-    opacity:0.16,
+    opacity:0.14,
 
     side:THREE.DoubleSide,
 
@@ -610,9 +614,10 @@ const beamMaterial = new THREE.MeshBasicMaterial({
 
 const beam = new THREE.Mesh(
 
-    new THREE.ConeGeometry(
-        1.0,
-        42,
+    new THREE.CylinderGeometry(
+        0.15,
+        2.5,
+        45,
         32,
         1,
         true
@@ -622,26 +627,25 @@ const beam = new THREE.Mesh(
 
 );
 
-// Point the beam horizontally.
+// Cylinder points along Y by default.
+// Rotate it so it points horizontally.
 beam.rotation.x = Math.PI / 2;
-
-beam.position.y = 24.2;
 
 lighthouse.add(beam);
 
 
-// Actual sweeping light.
+// Sweeping spotlight
 const sweepLight = new THREE.SpotLight(
 
     0xfff1b5,
 
-    12,
+    20,
 
-    80,
+    100,
 
-    Math.PI / 16,
+    Math.PI / 12,
 
-    0.45,
+    0.5,
 
     1
 
@@ -656,13 +660,7 @@ sweepLight.position.set(
 lighthouse.add(sweepLight);
 
 lighthouse.add(sweepLight.target);
-
-sweepLight.target.position.set(
-    0,
-    24.2,
-    40
-);
-
+    
 //
 // Detailed Porch Lantern
 //
@@ -944,11 +942,32 @@ function animate(){
     lighthouse.position.z
     );
 
-    // Sweep the lighthouse beam.
+// Sweep the lighthouse beam.
 const sweepAngle = time * 0.7;
 
-beam.rotation.z = sweepAngle;
 
+// Position the visible beam around
+// the lighthouse.
+beam.position.set(
+
+    Math.sin(sweepAngle) * 22,
+
+    24.2,
+
+    Math.cos(sweepAngle) * 22
+
+);
+
+
+// Point the beam back toward the lighthouse.
+beam.lookAt(
+    0,
+    24.2,
+    0
+);
+
+
+// Move the spotlight target.
 sweepLight.target.position.set(
 
     Math.sin(sweepAngle) * 40,
@@ -959,9 +978,10 @@ sweepLight.target.position.set(
 
 );
 
-// Slight beacon pulse.
+
+// Gentle beacon pulse.
 beacon.intensity =
-    8 + Math.sin(time * 8) * 1.2;
+    10 + Math.sin(time * 8) * 1.5;
 
     ocean.geometry.attributes.position.needsUpdate=true;
 
