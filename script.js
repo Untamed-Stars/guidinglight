@@ -248,7 +248,7 @@ const windowCount = 8;
 for(let i = 0; i < windowCount; i++){
 
     const windowAssembly = new THREE.Group();
-    };
+    
 
     //
     // Stone Frame
@@ -326,6 +326,7 @@ for(let i = 0; i < windowCount; i++){
 
     windowAssembly.add(light);
 
+
    /////////////////////////////////////////////////////
 // Spiral Placement
 /////////////////////////////////////////////////////
@@ -375,6 +376,8 @@ windowAssembly.lookAt(
 );
 
 windowGroup.add(windowAssembly);
+
+};
     
 //
 // Balcony
