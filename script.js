@@ -713,7 +713,7 @@ lantern.add(lanternBottom);
 // Glass body
 //
 
-const glass = new THREE.Mesh(
+const lanternGlass = new THREE.Mesh(
 
     new THREE.CylinderGeometry(
         .25,
@@ -740,7 +740,7 @@ const glass = new THREE.Mesh(
 
 );
 
-lantern.add(glass);
+lantern.add(lanternGlass);
 
 
 //
