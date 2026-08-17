@@ -179,19 +179,24 @@ lighthouse.add(leftFrame,rightFrame,topFrame);
 // Stone Steps
 //
 
-for(let i=0;i<5;i++){
+const stairMaterial = new THREE.MeshStandardMaterial({
+    color:0x777777,
+    roughness:1
+});
+
+const stairCount = 8;
+
+for(let i=0;i<stairCount;i++){
 
     const step = new THREE.Mesh(
 
         new THREE.BoxGeometry(
-            2.0 - i*0.2,
-            0.2,
-            0.6
+            1.8 + i * 0.08,
+            0.25,
+            0.48
         ),
 
-        new THREE.MeshStandardMaterial({
-            color:0x777777
-        })
+        stairMaterial
 
     );
 
@@ -199,9 +204,9 @@ for(let i=0;i<5;i++){
 
         0,
 
-        5.0 + i*0.2,
+        5.15 + i * 0.25,
 
-        4.2 - i*0.45
+        4.65 - i * 0.48
 
     );
 
@@ -320,53 +325,56 @@ for(let i = 0; i < windowCount; i++){
 
     windowAssembly.add(light);
 
-    /////////////////////////////////////////////////////
-    // Spiral Placement
-    /////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////
+// Spiral Placement
+/////////////////////////////////////////////////////
 
-    // Evenly spaced from bottom to top
-    const t = i / (windowCount - 1);
+const t = i / (windowCount - 1);
 
-    const y = 9 + t * 12;
+// Move windows from above the door toward the balcony.
+const y = 10 + t * 11;
 
-    // 1.5 turns around the lighthouse
-    const angle = t * Math.PI * 3;
+// 1.5 turns around the lighthouse.
+let angle = t * Math.PI * 3;
 
-    // Radius of tapered tower at this height
-    const localY = y - 7;
-
-    const towerRadius =
-        bottomRadius -
-        (bottomRadius - topRadius) *
-        (localY / towerHeight);
-
-    const radius = towerRadius + 0.08;
-
-    windowAssembly.position.set(
-
-        Math.sin(angle) * radius,
-
-        y,
-
-        Math.cos(angle) * radius
-
-    );
-
-    // Face directly away from the tower
-    windowAssembly.lookAt(
-
-        windowAssembly.position.x * 3,
-
-        y,
-
-        windowAssembly.position.z * 3
-
-    );
-
-    windowGroup.add(windowAssembly);
-
+// Keep the lower windows away from the door.
+if(i < 3){
+    angle += Math.PI * 0.45;
 }
 
+// Radius of tapered tower at this height.
+const localY = y - 7;
+
+const towerRadius =
+    bottomRadius -
+    (bottomRadius - topRadius) *
+    (localY / towerHeight);
+
+const radius = towerRadius + 0.08;
+
+windowAssembly.position.set(
+
+    Math.sin(angle) * radius,
+
+    y,
+
+    Math.cos(angle) * radius
+
+);
+
+// Face outward from the lighthouse.
+windowAssembly.lookAt(
+
+    windowAssembly.position.x * 3,
+
+    y,
+
+    windowAssembly.position.z * 3
+
+);
+
+windowGroup.add(windowAssembly);
+    
 //
 // Balcony
 //
@@ -571,15 +579,89 @@ lighthouse.add(vaneArrow);
 // Main Beacon
 //
 
-const beacon=new THREE.PointLight(
+// Glowing light inside the lantern room.
+const beacon = new THREE.PointLight(
     0xfff1b5,
-    10,
+    8,
     60
 );
 
-beacon.position.y=24.2;
+beacon.position.y = 24.2;
 
 lighthouse.add(beacon);
+
+
+// Sweeping visible beam.
+const beamMaterial = new THREE.MeshBasicMaterial({
+
+    color:0xfff3c4,
+
+    transparent:true,
+
+    opacity:0.16,
+
+    side:THREE.DoubleSide,
+
+    depthWrite:false,
+
+    blending:THREE.AdditiveBlending
+
+});
+
+const beam = new THREE.Mesh(
+
+    new THREE.ConeGeometry(
+        1.0,
+        42,
+        32,
+        1,
+        true
+    ),
+
+    beamMaterial
+
+);
+
+// Point the beam horizontally.
+beam.rotation.x = Math.PI / 2;
+
+beam.position.y = 24.2;
+
+lighthouse.add(beam);
+
+
+// Actual sweeping light.
+const sweepLight = new THREE.SpotLight(
+
+    0xfff1b5,
+
+    12,
+
+    80,
+
+    Math.PI / 16,
+
+    0.45,
+
+    1
+
+);
+
+sweepLight.position.set(
+    0,
+    24.2,
+    0
+);
+
+lighthouse.add(sweepLight);
+
+lighthouse.add(sweepLight.target);
+
+sweepLight.target.position.set(
+    0,
+    24.2,
+    40
+);
 
 //
 // Detailed Porch Lantern
@@ -862,7 +944,24 @@ function animate(){
     lighthouse.position.z
     );
 
-    beacon.intensity = 10 + Math.sin(time*8)*1.5;
+    // Sweep the lighthouse beam.
+const sweepAngle = time * 0.7;
+
+beam.rotation.z = sweepAngle;
+
+sweepLight.target.position.set(
+
+    Math.sin(sweepAngle) * 40,
+
+    24.2,
+
+    Math.cos(sweepAngle) * 40
+
+);
+
+// Slight beacon pulse.
+beacon.intensity =
+    8 + Math.sin(time * 8) * 1.2;
 
     ocean.geometry.attributes.position.needsUpdate=true;
 
