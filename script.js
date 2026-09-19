@@ -202,11 +202,11 @@ for(let i=0;i<stairCount;i++){
 
     step.position.set(
 
-        10,
+        0,
 
         5.15 + i * 0.25,
 
-        4.65 - i * 0.48
+        7.65 - i * 0.48
 
     );
 
