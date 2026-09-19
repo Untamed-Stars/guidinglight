@@ -186,6 +186,33 @@ const stairMaterial = new THREE.MeshStandardMaterial({
 
 const stairCount = 8;
 
+//
+// Stone Stair Foundation
+//
+
+const stairBase = new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+        2.4,
+        0.6,
+        3.9
+    ),
+
+    stairMaterial
+
+);
+
+// Angle of the staircase
+stairBase.rotation.x = Math.atan2(0.25, 0.48);
+
+stairBase.position.set(
+    0,
+    5.0,
+    5.25
+);
+
+lighthouse.add(stairBase);
+
 for(let i=0;i<stairCount;i++){
 
     const step = new THREE.Mesh(
@@ -339,10 +366,7 @@ const y = 10 + t * 11;
 // 1.5 turns around the lighthouse.
 let angle = t * Math.PI * 3;
 
-// Keep the lower windows away from the door.
-if(i < 3){
-    angle += Math.PI * 0.45;
-}
+
 
 // Radius of tapered tower at this height.
 const localY = y - 7;
@@ -631,12 +655,11 @@ const beam = new THREE.Mesh(
 
 );
 
-// Cylinder points along Y by default.
-// Rotate it so it points horizontally.
-beam.rotation.x = Math.PI / 2;
+// Move the beam geometry so its wide end
+// starts at the lighthouse light source.
+beam.geometry.translate(0, 22.5, 0);
 
 lighthouse.add(beam);
-
 
 // Sweeping spotlight
 const sweepLight = new THREE.SpotLight(
@@ -955,27 +978,27 @@ function animate(){
 const sweepAngle = time * 0.7;
 
 
-// Position the visible beam around
-// the lighthouse.
+// Keep the visible beam anchored
+// at the lighthouse light source.
 beam.position.set(
-
-    Math.sin(sweepAngle) * 22,
-
-    24.2,
-
-    Math.cos(sweepAngle) * 22
-
-);
-
-
-// Point the beam back toward the lighthouse.
-beam.lookAt(
     0,
     24.2,
     0
 );
 
+// Calculate the direction of the sweep.
+const beamDirection = new THREE.Vector3(
+    Math.sin(sweepAngle),
+    0,
+    Math.cos(sweepAngle)
+).normalize();
 
+// Rotate the beam outward.
+beam.quaternion.setFromUnitVectors(
+    new THREE.Vector3(0, 1, 0),
+    beamDirection
+);
+    
 // Move the spotlight target.
 sweepLight.target.position.set(
 
