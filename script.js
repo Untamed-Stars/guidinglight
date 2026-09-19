@@ -202,7 +202,7 @@ for(let i=0;i<stairCount;i++){
 
     step.position.set(
 
-        0,
+        10,
 
         5.15 + i * 0.25,
 
@@ -661,8 +661,13 @@ sweepLight.position.set(
     0
 );
 
-lighthouse.add(sweepLight);
+sweepLight.target.position.set(
+    0,
+    24.2,
+    20
+);
 
+lighthouse.add(sweepLight);
 lighthouse.add(sweepLight.target);
     
 //
