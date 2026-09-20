@@ -465,48 +465,49 @@ function createLighthouse() {
     // WINDOWS
     // =========================
 
-    function addWindow(y, angle) {
-        const windowGroup = new THREE.Group();
+   function addWindow(y, angle) {
+    const windowGroup = new THREE.Group();
 
-        const frameGeometry = new THREE.BoxGeometry(
-            1.0,
-            1.7,
-            0.18
-        );
+    const frameGeometry = new THREE.BoxGeometry(
+        1.0,
+        1.7,
+        0.18
+    );
 
-        const frame = new THREE.Mesh(
-            frameGeometry,
-            darkMaterial
-        );
+    const frame = new THREE.Mesh(
+        frameGeometry,
+        darkMaterial
+    );
 
-        windowGroup.add(frame);
+    windowGroup.add(frame);
 
-        const glassGeometry = new THREE.BoxGeometry(
-            0.65,
-            1.3,
-            0.2
-        );
+    const glassGeometry = new THREE.BoxGeometry(
+        0.65,
+        1.3,
+        0.2
+    );
 
-        const glass = new THREE.Mesh(
-            glassGeometry,
-            windowMaterial
-        );
+    const glass = new THREE.Mesh(
+        glassGeometry,
+        windowMaterial
+    );
 
-        glass.position.z = 0.08;
-        windowGroup.add(glass);
+    glass.position.z = 0.08;
+    windowGroup.add(glass);
 
-        const radius = 3.65;
+    // Wider tower = windows sit farther out
+    const radius = 5.15;
 
-        windowGroup.position.set(
-            Math.sin(angle) * radius,
-            y,
-            Math.cos(angle) * radius
-        );
+    windowGroup.position.set(
+        Math.sin(angle) * radius,
+        y,
+        Math.cos(angle) * radius
+    );
 
-        windowGroup.rotation.y = angle;
+    windowGroup.rotation.y = angle;
 
-        lighthouse.add(windowGroup);
-    }
+    lighthouse.add(windowGroup);
+}
 
     addWindow(5.2, 0);
     addWindow(9.5, Math.PI * 0.55);
@@ -602,7 +603,7 @@ function createLighthouse() {
     door.position.set(
         -0.85,
         1.6,
-        4.75
+        5.55
     );
 
     // Information for our future interaction system
@@ -627,7 +628,7 @@ function createLighthouse() {
     doorLight.position.set(
         0,
         2.5,
-        4.9
+        5.7
     );
 
     lighthouse.add(doorLight);
@@ -642,25 +643,25 @@ function createLighthouse() {
     });
 
     for (let i = 0; i < 8; i++) {
-        const stairGeometry = new THREE.BoxGeometry(
-            3.6 + i * 0.35,
-            0.35,
-            0.8
-        );
+    const stairGeometry = new THREE.BoxGeometry(
+        3.6 + i * 0.35,
+        0.35,
+        0.8
+    );
 
-        const stair = new THREE.Mesh(
-            stairGeometry,
-            stairMaterial
-        );
+    const stair = new THREE.Mesh(
+        stairGeometry,
+        stairMaterial
+    );
 
-        stair.position.set(
-            0,
-            0.2 + i * 0.35,
-            5.3 + i * 0.8
-        );
+    stair.position.set(
+        0,
+        1.45 - i * 0.35,
+        5.5 + i * 0.8
+    );
 
-        lighthouse.add(stair);
-    }
+    lighthouse.add(stair);
+}
 
     // =========================
     // POSITION
