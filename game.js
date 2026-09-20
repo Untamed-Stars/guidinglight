@@ -154,14 +154,9 @@ islandShape.lineTo(-34, 2);
 islandShape.lineTo(-35, -7);
 islandShape.closePath();
 
-const islandGeometry =
-    new THREE.ExtrudeGeometry(
-        islandShape,
-        {
-            depth: 3,
-            bevelEnabled: false
-        }
-    );
+const islandGeometry = new THREE.ShapeGeometry(
+    islandShape
+);
 
 const island = new THREE.Mesh(
     islandGeometry,
@@ -169,10 +164,10 @@ const island = new THREE.Mesh(
 );
 
 island.rotation.x = -Math.PI / 2;
-
-island.position.y = -0.5;
+island.position.y = 0;
 
 scene.add(island);
+
 
 // ========================================
 // BEACH
@@ -180,32 +175,27 @@ scene.add(island);
 
 const beachShape = new THREE.Shape();
 
-beachShape.moveTo(-31, -12);
-beachShape.lineTo(-27, -22);
-beachShape.lineTo(-15, -27);
-beachShape.lineTo(0, -29);
-beachShape.lineTo(15, -26);
-beachShape.lineTo(27, -19);
-beachShape.lineTo(31, -8);
-beachShape.lineTo(29, 4);
-beachShape.lineTo(25, 15);
-beachShape.lineTo(16, 23);
-beachShape.lineTo(3, 27);
-beachShape.lineTo(-9, 25);
-beachShape.lineTo(-20, 20);
-beachShape.lineTo(-27, 12);
-beachShape.lineTo(-31, 1);
-beachShape.lineTo(-32, -7);
+beachShape.moveTo(-34, -12);
+beachShape.lineTo(-30, -23);
+beachShape.lineTo(-17, -30);
+beachShape.lineTo(-2, -32);
+beachShape.lineTo(15, -29);
+beachShape.lineTo(30, -22);
+beachShape.lineTo(36, -9);
+beachShape.lineTo(34, 6);
+beachShape.lineTo(29, 18);
+beachShape.lineTo(18, 28);
+beachShape.lineTo(4, 32);
+beachShape.lineTo(-11, 30);
+beachShape.lineTo(-23, 25);
+beachShape.lineTo(-31, 15);
+beachShape.lineTo(-37, 2);
+beachShape.lineTo(-37, -8);
 beachShape.closePath();
 
-const beachGeometry =
-    new THREE.ExtrudeGeometry(
-        beachShape,
-        {
-            depth: 0.6,
-            bevelEnabled: false
-        }
-    );
+const beachGeometry = new THREE.ShapeGeometry(
+    beachShape
+);
 
 const beach = new THREE.Mesh(
     beachGeometry,
@@ -213,8 +203,7 @@ const beach = new THREE.Mesh(
 );
 
 beach.rotation.x = -Math.PI / 2;
-
-beach.position.y = -0.1;
+beach.position.y = -0.02;
 
 scene.add(beach);
 
@@ -546,51 +535,12 @@ function createLighthouse() {
 
     lighthouse.position.set(
         -10,
-        4.5,
+        0,
         -12
     );
 
     scene.add(lighthouse);
 }
-
-// ========================================
-// LIGHTHOUSE HILL
-// ========================================
-
-function createLighthouseHill() {
-
-    const hillMaterial =
-        new THREE.MeshStandardMaterial({
-            color: 0x65745a,
-            roughness: 1
-        });
-
-    const hillGeometry =
-        new THREE.CylinderGeometry(
-            10,
-            14,
-            5,
-            8
-        );
-
-    const hill =
-        new THREE.Mesh(
-            hillGeometry,
-            hillMaterial
-        );
-
-    hill.position.set(
-        -10,
-        2,
-        -12
-    );
-
-    hill.rotation.y = 0.2;
-
-    scene.add(hill);
-}
-
-createLighthouseHill();
 
 
 // ========================================
@@ -601,45 +551,57 @@ function createDock() {
 
     const dock = new THREE.Group();
 
+    const plankMaterial = new THREE.MeshStandardMaterial({
+        color: 0x6b4932,
+        roughness: 0.9
+    });
+
+
+    // ========================================
+    // DOCK WALKWAY
+    // ========================================
+
     const plankGeometry = new THREE.BoxGeometry(
-        2,
-        0.5,
-        5
+        2.8,
+        0.35,
+        3
     );
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 9; i++) {
 
         const plank = new THREE.Mesh(
             plankGeometry,
-            woodMaterial
+            plankMaterial
         );
 
-        plank.position.z = i * 4;
+        plank.position.z = i * 3;
 
         dock.add(plank);
     }
 
 
-    // Support posts
+    // ========================================
+    // SUPPORT POSTS
+    // ========================================
 
     const postGeometry = new THREE.CylinderGeometry(
-        0.25,
-        0.25,
-        4,
+        0.18,
+        0.18,
+        3.5,
         8
     );
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 9; i++) {
 
         const post1 = new THREE.Mesh(
             postGeometry,
-            woodMaterial
+            plankMaterial
         );
 
         post1.position.set(
-            -0.7,
+            -1,
             -1.5,
-            i * 4
+            i * 3
         );
 
         dock.add(post1);
@@ -647,28 +609,30 @@ function createDock() {
 
         const post2 = new THREE.Mesh(
             postGeometry,
-            woodMaterial
+            plankMaterial
         );
 
         post2.position.set(
-            0.7,
+            1,
             -1.5,
-            i * 4
+            i * 3
         );
 
         dock.add(post2);
     }
 
 
-    // Point the dock toward the sea.
-
-    dock.rotation.y = Math.PI / 2;
+    // ========================================
+    // POSITION
+    // ========================================
 
     dock.position.set(
-    -17,
-    -0.1,
-    18
-);
+        -18,
+        0.2,
+        20
+    );
+
+    dock.rotation.y = 0;
 
     scene.add(dock);
 }
@@ -791,7 +755,7 @@ const player = {
 camera.position.set(
     0,
     player.height,
-    8
+    5
 );
 
 
