@@ -208,330 +208,463 @@ beach.position.y = -0.02;
 scene.add(beach);
 
 
-// ========================================
-// LIGHTHOUSE
-// ========================================
-
 function createLighthouse() {
-
     const lighthouse = new THREE.Group();
 
-    // ========================================
-    // MAIN TOWER
-    // ========================================
+    // =========================
+    // MATERIALS
+    // =========================
 
     const towerMaterial = new THREE.MeshStandardMaterial({
-        color: 0xd9d1c1,
-        roughness: 0.8
+        color: 0x6f7d8d,
+        roughness: 0.85
     });
 
-    const towerGeometry = new THREE.CylinderGeometry(
-        3.2,
-        4.2,
-        12,
-        16
-    );
-
-    const tower = new THREE.Mesh(
-        towerGeometry,
-        towerMaterial
-    );
-
-    tower.position.y = 6;
-
-    lighthouse.add(tower);
-
-
-    // ========================================
-    // DARK BASE
-    // ========================================
-
-    const baseMaterial = new THREE.MeshStandardMaterial({
-        color: 0x665b50,
+    const stoneMaterial = new THREE.MeshStandardMaterial({
+        color: 0x4d5661,
         roughness: 1
     });
 
-    const baseGeometry = new THREE.CylinderGeometry(
-        4.5,
-        4.8,
-        1.2,
-        16
-    );
+    const darkMaterial = new THREE.MeshStandardMaterial({
+        color: 0x252b30,
+        roughness: 0.8
+    });
 
-    const base = new THREE.Mesh(
-        baseGeometry,
-        baseMaterial
-    );
+    const windowMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffe58a,
+        emissive: 0xffc44d,
+        emissiveIntensity: 1.5
+    });
 
-    base.position.y = 0.6;
-
-    lighthouse.add(base);
-
-
-    // ========================================
-    // HORIZONTAL BANDS
-    // ========================================
-
-    const bandMaterial = new THREE.MeshStandardMaterial({
-        color: 0x4c514f,
+    const doorMaterial = new THREE.MeshStandardMaterial({
+        color: 0x49372c,
         roughness: 0.9
     });
 
-    function addBand(y, radius) {
-
-        const geometry = new THREE.CylinderGeometry(
-            radius,
-            radius,
-            0.35,
-            16
-        );
-
-        const band = new THREE.Mesh(
-            geometry,
-            bandMaterial
-        );
-
-        band.position.y = y;
-
-        lighthouse.add(band);
-    }
-
-    addBand(2.2, 3.75);
-    addBand(9.8, 3.0);
-
-
-    // ========================================
-    // WINDOWS
-    // ========================================
-
-    const windowMaterial = new THREE.MeshStandardMaterial({
-        color: 0x31434a,
-        roughness: 0.5
+    const roofMaterial = new THREE.MeshStandardMaterial({
+        color: 0x4c6b63,
+        roughness: 0.85
     });
 
-    function addWindow(y, rotation = 0) {
+    // =========================
+    // BASE
+    // =========================
 
-        const geometry = new THREE.BoxGeometry(
-            0.7,
-            1.4,
-            0.15
-        );
+    const baseGeometry = new THREE.CylinderGeometry(
+        6.0,
+        6.5,
+        1.5,
+        20
+    );
 
-        const window = new THREE.Mesh(
-            geometry,
-            windowMaterial
-        );
+    const base = new THREE.Mesh(baseGeometry, stoneMaterial);
+    base.position.y = 0.7;
+    lighthouse.add(base);
 
-        const radius = 3.15;
+    // =========================
+    // MAIN TOWER
+    // =========================
 
-        window.position.set(
-            Math.sin(rotation) * radius,
-            y,
-            Math.cos(rotation) * radius
-        );
+    const towerGeometry = new THREE.CylinderGeometry(
+        4.2,     // top radius
+        5.6,     // bottom radius
+        22,      // height
+        24
+    );
 
-        window.rotation.y = rotation;
+    const tower = new THREE.Mesh(towerGeometry, towerMaterial);
+    tower.position.y = 11.7;
+    lighthouse.add(tower);
 
-        lighthouse.add(window);
-    }
-
-    addWindow(4.2, 0);
-    addWindow(7, Math.PI);
-    addWindow(9, 0);
-
-
-    // ========================================
-    // LANTERN ROOM PLATFORM
-    // ========================================
+    // =========================
+    // TOP PLATFORM
+    // =========================
 
     const platformGeometry = new THREE.CylinderGeometry(
-        4,
-        4,
-        0.45,
-        16
+        4.9,
+        4.9,
+        0.6,
+        24
     );
 
-    const platform = new THREE.Mesh(
-        platformGeometry,
-        bandMaterial
-    );
-
-    platform.position.y = 10.2;
-
+    const platform = new THREE.Mesh(platformGeometry, darkMaterial);
+    platform.position.y = 22.7;
     lighthouse.add(platform);
 
+    // =========================
+    // BALCONY RAILING
+    // =========================
 
-    // ========================================
-    // LANTERN ROOM
-    // ========================================
+    const railingRadius = 4.7;
 
-    const lanternFrameMaterial =
-        new THREE.MeshStandardMaterial({
-            color: 0x333b3a,
-            roughness: 0.7
-        });
+    for (let i = 0; i < 16; i++) {
+        const angle = (i / 16) * Math.PI * 2;
 
-
-    const lanternGlassMaterial =
-        new THREE.MeshStandardMaterial({
-            color: 0xffe7a3,
-            emissive: 0xffc85c,
-            emissiveIntensity: 1.5,
-            transparent: true,
-            opacity: 0.75
-        });
-
-
-    const lanternGlassGeometry =
-        new THREE.CylinderGeometry(
-            2.7,
-            2.7,
-            2.8,
-            12
+        const postGeometry = new THREE.BoxGeometry(
+            0.12,
+            1.2,
+            0.12
         );
 
-    const lanternGlass = new THREE.Mesh(
-        lanternGlassGeometry,
-        lanternGlassMaterial
-    );
-
-    lanternGlass.position.y = 11.8;
-
-    lighthouse.add(lanternGlass);
-
-
-    // Vertical supports around the lantern
-
-    for (let i = 0; i < 8; i++) {
-
-        const angle =
-            (i / 8) * Math.PI * 2;
-
-        const postGeometry =
-            new THREE.BoxGeometry(
-                0.15,
-                3,
-                0.15
-            );
-
-        const post =
-            new THREE.Mesh(
-                postGeometry,
-                lanternFrameMaterial
-            );
+        const post = new THREE.Mesh(postGeometry, darkMaterial);
 
         post.position.set(
-            Math.sin(angle) * 2.65,
-            11.8,
-            Math.cos(angle) * 2.65
+            Math.sin(angle) * railingRadius,
+            23.25,
+            Math.cos(angle) * railingRadius
         );
 
         lighthouse.add(post);
     }
 
+    // Bottom railing ring
+    const railingBottomGeometry = new THREE.TorusGeometry(
+        railingRadius,
+        0.09,
+        6,
+        32
+    );
 
-    // ========================================
-    // LANTERN ROOF
-    // ========================================
+    const railingBottom = new THREE.Mesh(
+        railingBottomGeometry,
+        darkMaterial
+    );
 
-    const roofMaterial =
-        new THREE.MeshStandardMaterial({
-            color: 0x6f4038,
-            roughness: 0.8
-        });
+    railingBottom.rotation.x = Math.PI / 2;
+    railingBottom.position.y = 22.8;
+    lighthouse.add(railingBottom);
 
-    const roofGeometry =
-        new THREE.ConeGeometry(
-            3.3,
-            1.8,
-            12
+    // Top railing ring
+    const railingTop = new THREE.Mesh(
+        railingBottomGeometry,
+        darkMaterial
+    );
+
+    railingTop.rotation.x = Math.PI / 2;
+    railingTop.position.y = 23.8;
+    lighthouse.add(railingTop);
+
+    // =========================
+    // LANTERN ROOM
+    // =========================
+
+    const lanternGlassMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffe9a8,
+        emissive: 0xffc94f,
+        emissiveIntensity: 1.8,
+        transparent: true,
+        opacity: 0.7
+    });
+
+    const lanternGeometry = new THREE.CylinderGeometry(
+        3.0,
+        3.0,
+        3.0,
+        16
+    );
+
+    const lantern = new THREE.Mesh(
+        lanternGeometry,
+        lanternGlassMaterial
+    );
+
+    lantern.position.y = 25.1;
+    lighthouse.add(lantern);
+
+    // Lantern vertical frames
+    for (let i = 0; i < 12; i++) {
+        const angle = (i / 12) * Math.PI * 2;
+
+        const frameGeometry = new THREE.BoxGeometry(
+            0.14,
+            3.2,
+            0.14
         );
 
-    const roof =
-        new THREE.Mesh(
-            roofGeometry,
-            roofMaterial
+        const frame = new THREE.Mesh(
+            frameGeometry,
+            darkMaterial
         );
 
-    roof.position.y = 13.9;
+        frame.position.set(
+            Math.sin(angle) * 2.9,
+            25.1,
+            Math.cos(angle) * 2.9
+        );
 
+        lighthouse.add(frame);
+    }
+
+    // =========================
+    // LANTERN TOP
+    // =========================
+
+    const roofGeometry = new THREE.ConeGeometry(
+        3.5,
+        2.0,
+        16
+    );
+
+    const roof = new THREE.Mesh(
+        roofGeometry,
+        roofMaterial
+    );
+
+    roof.position.y = 27.6;
     lighthouse.add(roof);
 
+    // Small roof cap
+    const capGeometry = new THREE.CylinderGeometry(
+        0.45,
+        0.45,
+        0.35,
+        10
+    );
 
-    // ========================================
-    // ROOF SPIRE
-    // ========================================
+    const cap = new THREE.Mesh(
+        capGeometry,
+        darkMaterial
+    );
 
-    const spireGeometry =
-        new THREE.CylinderGeometry(
-            0.12,
-            0.12,
-            1.5,
-            8
-        );
+    cap.position.y = 28.7;
+    lighthouse.add(cap);
 
-    const spire =
-        new THREE.Mesh(
-            spireGeometry,
-            lanternFrameMaterial
-        );
+    // =========================
+    // SPIRE
+    // =========================
 
-    spire.position.y = 15.5;
+    const spireGeometry = new THREE.CylinderGeometry(
+        0.08,
+        0.08,
+        1.8,
+        8
+    );
 
+    const spire = new THREE.Mesh(
+        spireGeometry,
+        darkMaterial
+    );
+
+    spire.position.y = 29.7;
     lighthouse.add(spire);
 
+    // =========================
+    // LIGHT
+    // =========================
 
-    // ========================================
-    // WARM LIGHT
-    // ========================================
+    const lighthouseLight = new THREE.PointLight(
+        0xffd477,
+        40,
+        45
+    );
 
-    const lighthouseLight =
-        new THREE.PointLight(
-            0xffd98a,
-            30,
-            35
-        );
-
-    lighthouseLight.position.y = 12;
-
+    lighthouseLight.position.y = 25.2;
     lighthouse.add(lighthouseLight);
 
+    // =========================
+    // WINDOWS
+    // =========================
 
-    // ========================================
-    // DOOR
-    // ========================================
+    function addWindow(y, angle) {
+        const windowGroup = new THREE.Group();
 
-    const doorMaterial =
-        new THREE.MeshStandardMaterial({
-            color: 0x493b32,
-            roughness: 0.9
-        });
+        const frameGeometry = new THREE.BoxGeometry(
+            1.0,
+            1.7,
+            0.18
+        );
 
-    const doorGeometry =
-        new THREE.BoxGeometry(
-            1.4,
-            2.5,
+        const frame = new THREE.Mesh(
+            frameGeometry,
+            darkMaterial
+        );
+
+        windowGroup.add(frame);
+
+        const glassGeometry = new THREE.BoxGeometry(
+            0.65,
+            1.3,
             0.2
         );
 
-    const door =
-        new THREE.Mesh(
-            doorGeometry,
-            doorMaterial
+        const glass = new THREE.Mesh(
+            glassGeometry,
+            windowMaterial
         );
 
-    door.position.set(
-        0,
-        1.8,
-        4.05
+        glass.position.z = 0.08;
+        windowGroup.add(glass);
+
+        const radius = 3.65;
+
+        windowGroup.position.set(
+            Math.sin(angle) * radius,
+            y,
+            Math.cos(angle) * radius
+        );
+
+        windowGroup.rotation.y = angle;
+
+        lighthouse.add(windowGroup);
+    }
+
+    addWindow(5.2, 0);
+    addWindow(9.5, Math.PI * 0.55);
+    addWindow(14, Math.PI);
+    addWindow(18.5, Math.PI * 1.55);
+
+    // =========================
+    // DOOR
+    // =========================
+
+    // This group is the hinge.
+    // The actual door is offset from it,
+    // allowing the door to rotate naturally later.
+
+    const door = new THREE.Group();
+
+    const doorGeometry = new THREE.BoxGeometry(
+        1.7,
+        2.8,
+        0.25
     );
+
+    const doorMesh = new THREE.Mesh(
+        doorGeometry,
+        doorMaterial
+    );
+
+    // Move the door away from the hinge.
+    doorMesh.position.x = 0.85;
+
+    door.add(doorMesh);
+
+    // Door frame
+    const frameLeftGeometry = new THREE.BoxGeometry(
+        0.18,
+        3.2,
+        0.35
+    );
+
+    const frameLeft = new THREE.Mesh(
+        frameLeftGeometry,
+        darkMaterial
+    );
+
+    frameLeft.position.x = 1.75;
+    frameLeft.position.y = 0.2;
+    door.add(frameLeft);
+
+    const frameRight = frameLeft.clone();
+    frameRight.position.x = 0;
+    door.add(frameRight);
+
+    const frameTopGeometry = new THREE.BoxGeometry(
+        1.9,
+        0.18,
+        0.35
+    );
+
+    const frameTop = new THREE.Mesh(
+        frameTopGeometry,
+        darkMaterial
+    );
+
+    frameTop.position.set(
+        0.85,
+        1.8,
+        0
+    );
+
+    door.add(frameTop);
+
+    // Door handle
+    const handleGeometry = new THREE.SphereGeometry(
+        0.1,
+        8,
+        8
+    );
+
+    const handle = new THREE.Mesh(
+        handleGeometry,
+        darkMaterial
+    );
+
+    handle.position.set(
+        1.5,
+        0,
+        0.18
+    );
+
+    door.add(handle);
+
+    // Door hinge position
+    door.position.set(
+        -0.85,
+        1.6,
+        4.75
+    );
+
+    // Information for our future interaction system
+    door.userData.isOpen = false;
+    door.userData.openAngle = -Math.PI / 2;
+    door.userData.closedAngle = 0;
+
+    lighthouse.userData.door = door;
 
     lighthouse.add(door);
 
+    // =========================
+    // DOOR LIGHT
+    // =========================
 
-    // ========================================
-    // PLACE LIGHTHOUSE
-    // ========================================
+    const doorLight = new THREE.PointLight(
+        0xffc66d,
+        4,
+        8
+    );
+
+    doorLight.position.set(
+        0,
+        2.5,
+        4.9
+    );
+
+    lighthouse.add(doorLight);
+
+    // =========================
+    // FRONT STAIRS
+    // =========================
+
+    const stairMaterial = new THREE.MeshStandardMaterial({
+        color: 0x505b67,
+        roughness: 1
+    });
+
+    for (let i = 0; i < 8; i++) {
+        const stairGeometry = new THREE.BoxGeometry(
+            3.6 + i * 0.35,
+            0.35,
+            0.8
+        );
+
+        const stair = new THREE.Mesh(
+            stairGeometry,
+            stairMaterial
+        );
+
+        stair.position.set(
+            0,
+            0.2 + i * 0.35,
+            5.3 + i * 0.8
+        );
+
+        lighthouse.add(stair);
+    }
+
+    // =========================
+    // POSITION
+    // =========================
 
     lighthouse.position.set(
         -10,
@@ -541,9 +674,6 @@ function createLighthouse() {
 
     scene.add(lighthouse);
 }
-
-createLighthouse();
-
 
 // ========================================
 // DOCK
