@@ -675,6 +675,8 @@ function createLighthouse() {
     scene.add(lighthouse);
 }
 
+createLighthouse();
+
 // ========================================
 // DOCK
 // ========================================
