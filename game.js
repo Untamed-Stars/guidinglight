@@ -134,40 +134,87 @@ scene.add(ocean);
 // ISLAND
 // ========================================
 
-const islandGeometry = new THREE.CylinderGeometry(
-    38,
-    45,
-    3,
-    10
-);
+const islandShape = new THREE.Shape();
+
+islandShape.moveTo(-32, -12);
+islandShape.lineTo(-28, -22);
+islandShape.lineTo(-16, -28);
+islandShape.lineTo(-2, -30);
+islandShape.lineTo(14, -27);
+islandShape.lineTo(28, -20);
+islandShape.lineTo(34, -8);
+islandShape.lineTo(32, 5);
+islandShape.lineTo(27, 17);
+islandShape.lineTo(17, 26);
+islandShape.lineTo(4, 30);
+islandShape.lineTo(-10, 28);
+islandShape.lineTo(-21, 23);
+islandShape.lineTo(-29, 14);
+islandShape.lineTo(-34, 2);
+islandShape.lineTo(-35, -7);
+islandShape.closePath();
+
+const islandGeometry =
+    new THREE.ExtrudeGeometry(
+        islandShape,
+        {
+            depth: 3,
+            bevelEnabled: false
+        }
+    );
 
 const island = new THREE.Mesh(
     islandGeometry,
     grassMaterial
 );
 
-island.position.y = -0.2;
+island.rotation.x = -Math.PI / 2;
+
+island.position.y = -0.5;
 
 scene.add(island);
 
-
 // ========================================
-// BEACH / SHORE
+// BEACH
 // ========================================
 
-const beachGeometry = new THREE.CylinderGeometry(
-    40,
-    47,
-    1,
-    10
-);
+const beachShape = new THREE.Shape();
+
+beachShape.moveTo(-31, -12);
+beachShape.lineTo(-27, -22);
+beachShape.lineTo(-15, -27);
+beachShape.lineTo(0, -29);
+beachShape.lineTo(15, -26);
+beachShape.lineTo(27, -19);
+beachShape.lineTo(31, -8);
+beachShape.lineTo(29, 4);
+beachShape.lineTo(25, 15);
+beachShape.lineTo(16, 23);
+beachShape.lineTo(3, 27);
+beachShape.lineTo(-9, 25);
+beachShape.lineTo(-20, 20);
+beachShape.lineTo(-27, 12);
+beachShape.lineTo(-31, 1);
+beachShape.lineTo(-32, -7);
+beachShape.closePath();
+
+const beachGeometry =
+    new THREE.ExtrudeGeometry(
+        beachShape,
+        {
+            depth: 0.6,
+            bevelEnabled: false
+        }
+    );
 
 const beach = new THREE.Mesh(
     beachGeometry,
     dirtMaterial
 );
 
-beach.position.y = -1.0;
+beach.rotation.x = -Math.PI / 2;
+
+beach.position.y = -0.1;
 
 scene.add(beach);
 
@@ -499,12 +546,51 @@ function createLighthouse() {
 
     lighthouse.position.set(
         -10,
-        0,
+        4.5,
         -12
     );
 
     scene.add(lighthouse);
 }
+
+// ========================================
+// LIGHTHOUSE HILL
+// ========================================
+
+function createLighthouseHill() {
+
+    const hillMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x65745a,
+            roughness: 1
+        });
+
+    const hillGeometry =
+        new THREE.CylinderGeometry(
+            10,
+            14,
+            5,
+            8
+        );
+
+    const hill =
+        new THREE.Mesh(
+            hillGeometry,
+            hillMaterial
+        );
+
+    hill.position.set(
+        -10,
+        2,
+        -12
+    );
+
+    hill.rotation.y = 0.2;
+
+    scene.add(hill);
+}
+
+createLighthouseHill();
 
 
 // ========================================
@@ -576,13 +662,13 @@ function createDock() {
 
     // Point the dock toward the sea.
 
-    dock.rotation.y = Math.PI / 4;
+    dock.rotation.y = Math.PI / 2;
 
     dock.position.set(
-        -16,
-        0,
-        10
-    );
+    -17,
+    -0.1,
+    18
+);
 
     scene.add(dock);
 }
@@ -651,18 +737,32 @@ function createTree(x, z, scale = 1) {
 // Forest area on the right side of the map.
 
 const forestTrees = [
-    [12, -14, 1.1],
-    [18, -11, 0.9],
-    [23, -7, 1.2],
-    [14, -5, 0.8],
-    [21, -1, 1],
-    [27, 2, 1.1],
-    [17, 4, 0.9],
-    [24, 8, 1.2],
-    [12, 8, 1],
-    [20, 12, 0.8],
-    [7, 3, 1.1],
-    [10, -1, 0.9]
+    [10, -16, 1.1],
+    [16, -15, 0.9],
+    [22, -12, 1.2],
+    [27, -8, 1],
+    
+    [12, -8, 0.9],
+    [18, -6, 1.1],
+    [25, -3, 0.8],
+    [29, 2, 1.2],
+
+    [10, 0, 1],
+    [15, 2, 1.2],
+    [22, 5, 0.9],
+    [27, 8, 1.1],
+
+    [8, 7, 0.8],
+    [14, 10, 1.1],
+    [20, 12, 0.9],
+    [24, 15, 1.2],
+
+    [5, 14, 1],
+    [11, 17, 0.8],
+    [17, 18, 1.1],
+
+    [4, 3, 0.7],
+    [7, -3, 0.9]
 ];
 
 for (const tree of forestTrees) {
@@ -822,7 +922,7 @@ function updatePlayer(delta) {
             yaw
         );
 
-
+        
         camera.position.x +=
             direction.x *
             player.speed *
