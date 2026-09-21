@@ -1351,6 +1351,9 @@ function updatePlayer(delta) {
 
     const direction =
         new THREE.Vector3();
+}
+
+const clock = new THREE.Clock();
 
 
     // ========================================
