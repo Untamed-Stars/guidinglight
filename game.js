@@ -515,105 +515,159 @@ function createLighthouse() {
     addWindow(18.5, Math.PI * 1.55);
 
     // =========================
-    // DOOR
-    // =========================
+// DOOR
+// =========================
 
-    // This group is the hinge.
-    // The actual door is offset from it,
-    // allowing the door to rotate naturally later.
+// The door uses a separate group as its hinge.
+// This lets us rotate the whole door open later.
 
-    const door = new THREE.Group();
+const door = new THREE.Group();
 
-    const doorGeometry = new THREE.BoxGeometry(
-        1.7,
-        2.8,
-        0.25
-    );
 
-    const doorMesh = new THREE.Mesh(
-        doorGeometry,
-        doorMaterial
-    );
+// ----------------------------------------
+// Door itself
+// ----------------------------------------
 
-    // Move the door away from the hinge.
-    doorMesh.position.x = 0.85;
+const doorGeometry = new THREE.BoxGeometry(
+    1.8,
+    3.0,
+    0.25
+);
 
-    door.add(doorMesh);
+const doorMesh = new THREE.Mesh(
+    doorGeometry,
+    doorMaterial
+);
 
-    // Door frame
-    const frameLeftGeometry = new THREE.BoxGeometry(
-        0.18,
-        3.2,
-        0.35
-    );
+// The hinge is on the left side.
+// Moving the door right makes it rotate
+// around its left edge later.
 
-    const frameLeft = new THREE.Mesh(
-        frameLeftGeometry,
-        darkMaterial
-    );
+doorMesh.position.set(
+    0.9,
+    0,
+    0
+);
 
-    frameLeft.position.x = 1.75;
-    frameLeft.position.y = 0.2;
-    door.add(frameLeft);
+door.add(doorMesh);
 
-    const frameRight = frameLeft.clone();
-    frameRight.position.x = 0;
-    door.add(frameRight);
 
-    const frameTopGeometry = new THREE.BoxGeometry(
-        1.9,
-        0.18,
-        0.35
-    );
+// ----------------------------------------
+// Door frame
+// ----------------------------------------
 
-    const frameTop = new THREE.Mesh(
-        frameTopGeometry,
-        darkMaterial
-    );
+const frameMaterial = darkMaterial;
 
-    frameTop.position.set(
-        0.85,
-        1.8,
-        0
-    );
 
-    door.add(frameTop);
+// Left side of frame
+const leftFrameGeometry = new THREE.BoxGeometry(
+    0.2,
+    3.4,
+    0.35
+);
 
-    // Door handle
-    const handleGeometry = new THREE.SphereGeometry(
-        0.1,
-        8,
-        8
-    );
+const leftFrame = new THREE.Mesh(
+    leftFrameGeometry,
+    frameMaterial
+);
 
-    const handle = new THREE.Mesh(
-        handleGeometry,
-        darkMaterial
-    );
+leftFrame.position.set(
+    0,
+    0.2,
+    0
+);
 
-    handle.position.set(
-        1.5,
-        0,
-        0.18
-    );
+door.add(leftFrame);
 
-    door.add(handle);
 
-    // Door hinge position
-    door.position.set(
-        -0.85,
-        1.6,
-        5.55
-    );
+// Right side of frame
+const rightFrame = leftFrame.clone();
 
-    // Information for our future interaction system
-    door.userData.isOpen = false;
-    door.userData.openAngle = -Math.PI / 2;
-    door.userData.closedAngle = 0;
+rightFrame.position.set(
+    1.8,
+    0.2,
+    0
+);
 
-    lighthouse.userData.door = door;
+door.add(rightFrame);
 
-    lighthouse.add(door);
+
+// Top of frame
+const topFrameGeometry = new THREE.BoxGeometry(
+    2.0,
+    0.2,
+    0.35
+);
+
+const topFrame = new THREE.Mesh(
+    topFrameGeometry,
+    frameMaterial
+);
+
+topFrame.position.set(
+    0.9,
+    1.9,
+    0
+);
+
+door.add(topFrame);
+
+
+// ----------------------------------------
+// Door handle
+// ----------------------------------------
+
+const handleGeometry = new THREE.SphereGeometry(
+    0.1,
+    8,
+    8
+);
+
+const handle = new THREE.Mesh(
+    handleGeometry,
+    darkMaterial
+);
+
+handle.position.set(
+    1.5,
+    0,
+    0.2
+);
+
+door.add(handle);
+
+
+// ----------------------------------------
+// Door position
+// ----------------------------------------
+
+// Centre of the doorway is now aligned
+// with the centre of the stairs.
+
+door.position.set(
+    -0.9,
+    1.65,
+    5.75
+);
+
+
+// ----------------------------------------
+// Future interaction data
+// ----------------------------------------
+
+door.userData.isOpen = false;
+
+door.userData.openAngle = -Math.PI / 2;
+
+door.userData.closedAngle = 0;
+
+
+// Save the door so the interaction system
+// can find it later.
+
+lighthouse.userData.door = door;
+
+lighthouse.add(door);
 
     // =========================
     // DOOR LIGHT
@@ -628,7 +682,7 @@ function createLighthouse() {
     doorLight.position.set(
         0,
         2.5,
-        5.7
+        5.9
     );
 
     lighthouse.add(doorLight);
