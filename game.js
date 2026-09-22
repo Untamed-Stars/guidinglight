@@ -832,6 +832,7 @@ for (let i = 0; i < wallSegments; i++) {
         lighthouse
     );
 
+}
 
 createLighthouse();
 
