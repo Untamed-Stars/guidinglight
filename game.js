@@ -327,50 +327,43 @@ function createLighthouse() {
     lighthouse.add(base);
 
 
-    // ========================================
-    // TOWER WALLS
-    // ========================================
-    //
-    // Instead of one solid cylinder,
-    // create four wall sections.
-    //
-    // The front wall has a doorway gap.
-    //
-    // ========================================
+   // ========================================
+// TOWER WALLS
+// ========================================
 
-    // ----------------------------------------
-// Lighthouse walls with a doorway gap on the front
 const wallHeight = towerHeight;
 const wallSegments = 12;
-
-// Leave approximately a 2.4-wide doorway at the front (+Z)
 const doorwayAngle = 0.42;
 
 for (let i = 0; i < wallSegments; i++) {
+
     const angle = (i / wallSegments) * Math.PI * 2;
 
-    // Skip the front section for the doorway
     if (Math.abs(angle) < doorwayAngle) {
         continue;
     }
 
     const segmentAngle = (Math.PI * 2) / wallSegments;
 
+    const wallGeometry = new THREE.CylinderGeometry(
+        topRadius,
+        bottomRadius,
+        wallHeight,
+        8,
+        1,
+        false,
+        angle,
+        segmentAngle
+    );
+
     const wall = new THREE.Mesh(
-        new THREE.CylinderGeometry(
-            topRadius,
-            bottomRadius,
-            wallHeight,
-            8,
-            1,
-            false,
-            angle,
-            segmentAngle
-        ),
+        wallGeometry,
         lighthouseMaterial
     );
 
-    wall.position.y = towerBottom + wallHeight / 2;
+    wall.position.y =
+        towerBottom + wallHeight / 2;
+
     lighthouse.add(wall);
 }
 
