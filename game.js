@@ -338,9 +338,6 @@ function createLighthouse() {
     //
     // ========================================
 
-    const wallHeight = towerHeight;
-
-
     // ----------------------------------------
 // Lighthouse walls with a doorway gap on the front
 const wallHeight = towerHeight;
@@ -1204,6 +1201,41 @@ function checkPlayerCollision() {
 
 const clock = new THREE.Clock();
 
+function checkLighthouseCollision(x, z) {
+    const lighthouseX = -10;
+    const lighthouseZ = -12;
+
+    const outerRadius = 7;
+    const innerRadius = 5.8;
+
+    const dx = x - lighthouseX;
+    const dz = z - lighthouseZ;
+
+    const distance = Math.sqrt(dx * dx + dz * dz);
+
+    // Completely outside the wall
+    if (distance > outerRadius + 0.45) {
+        return false;
+    }
+
+    // Completely inside the lighthouse
+    if (distance < innerRadius) {
+        return false;
+    }
+
+    // Front doorway
+    const angle = Math.atan2(dx, dz);
+
+    const doorwayHalfAngle = 0.42;
+
+    if (Math.abs(angle) < doorwayHalfAngle) {
+        return false;
+    }
+
+    // Inside the wall itself
+    return true;
+}
+
 function updatePlayer(delta) {
 
     const direction =
@@ -1272,21 +1304,6 @@ if (checkPlayerCollision() || checkLighthouseCollision(camera.position.x, camera
         if (checkPlayerCollision() || checkLighthouseCollision(camera.position.x, camera.position.z)) {
             camera.position.z -= moveZ;
         }
-    }
-
-    function checkLighthouseCollision(x, z) {
-        const lighthouseX = -10;
-        const lighthouseZ = -12;
-
-        const lighthouseRadius = 6;
-        const playerRadius = 0.45;
-
-        const dx = x - lighthouseX;
-        const dz = z - lighthouseZ;
-
-        const distance = Math.sqrt(dx * dx + dz * dz);
-
-        return distance < lighthouseRadius + playerRadius;
     }
 
 
