@@ -342,119 +342,40 @@ function createLighthouse() {
 
 
     // ----------------------------------------
-    // Back wall
-    // ----------------------------------------
+// Lighthouse walls with a doorway gap on the front
+const wallHeight = towerHeight;
+const wallSegments = 12;
 
-    const backWallGeometry =
+// Leave approximately a 2.4-wide doorway at the front (+Z)
+const doorwayAngle = 0.42;
+
+for (let i = 0; i < wallSegments; i++) {
+    const angle = (i / wallSegments) * Math.PI * 2;
+
+    // Skip the front section for the doorway
+    if (Math.abs(angle) < doorwayAngle) {
+        continue;
+    }
+
+    const segmentAngle = (Math.PI * 2) / wallSegments;
+
+    const wall = new THREE.Mesh(
         new THREE.CylinderGeometry(
             topRadius,
             bottomRadius,
             wallHeight,
-            24,
+            8,
             1,
             false,
-            Math.PI * 0.25,
-            Math.PI * 0.5
-        );
+            angle,
+            segmentAngle
+        ),
+        lighthouseMaterial
+    );
 
-    const backWall =
-        new THREE.Mesh(
-            backWallGeometry,
-            towerMaterial
-        );
-
-    backWall.position.y =
-        towerBottom + wallHeight / 2;
-
-    lighthouse.add(backWall);
-
-
-    // ----------------------------------------
-    // Left wall
-    // ----------------------------------------
-
-    const leftWallGeometry =
-        new THREE.CylinderGeometry(
-            topRadius,
-            bottomRadius,
-            wallHeight,
-            24,
-            1,
-            false,
-            Math.PI * 0.75,
-            Math.PI * 0.5
-        );
-
-    const leftWall =
-        new THREE.Mesh(
-            leftWallGeometry,
-            towerMaterial
-        );
-
-    leftWall.position.y =
-        towerBottom + wallHeight / 2;
-
-    lighthouse.add(leftWall);
-
-
-    // ----------------------------------------
-    // Right wall
-    // ----------------------------------------
-
-    const rightWallGeometry =
-        new THREE.CylinderGeometry(
-            topRadius,
-            bottomRadius,
-            wallHeight,
-            24,
-            1,
-            false,
-            Math.PI * 1.75,
-            Math.PI * 0.5
-        );
-
-    const rightWall =
-        new THREE.Mesh(
-            rightWallGeometry,
-            towerMaterial
-        );
-
-    rightWall.position.y =
-        towerBottom + wallHeight / 2;
-
-    lighthouse.add(rightWall);
-
-
-    // ========================================
-    // FRONT WALL
-    // ========================================
-    //
-    // Two sections leave a real doorway.
-    //
-    // ========================================
-
-    const frontWallGeometry =
-        new THREE.CylinderGeometry(
-            topRadius,
-            bottomRadius,
-            wallHeight,
-            24,
-            1,
-            false,
-            Math.PI * 1.25,
-            Math.PI * 0.5
-        );
-
-    const frontWall =
-        new THREE.Mesh(
-            frontWallGeometry,
-            towerMaterial
-        );
-
-    frontWall.position.y =
-        towerBottom + wallHeight / 2;
-
-    lighthouse.add(frontWall);
+    wall.position.y = towerBottom + wallHeight / 2;
+    lighthouse.add(wall);
+}
 
 
     // ========================================
@@ -922,79 +843,6 @@ function createLighthouse() {
     );
 
 
-    // ========================================
-    // LIGHTHOUSE COLLISIONS
-    // ========================================
-
-    // These are deliberately simple for now.
-    // The doorway itself is left open.
-
-    const worldX = -10;
-    const worldZ = -12;
-
-
-    // Back wall
-    addCollisionBox(
-        worldX,
-        towerTop / 2,
-        worldZ - 5.5,
-        12,
-        towerHeight,
-        1
-    );
-
-
-    // Left wall
-    addCollisionBox(
-        worldX - 5.5,
-        towerTop / 2,
-        worldZ,
-        1,
-        towerHeight,
-        12
-    );
-
-
-    // Right wall
-    addCollisionBox(
-        worldX + 5.5,
-        towerTop / 2,
-        worldZ,
-        1,
-        towerHeight,
-        12
-    );
-
-
-    // Front wall sections.
-    // Leave a gap for the doorway.
-
-    addCollisionBox(
-        worldX - 4.5,
-        towerTop / 2,
-        worldZ + 5.5,
-        3,
-        towerHeight,
-        1
-    );
-
-    addCollisionBox(
-        worldX + 4.5,
-        towerTop / 2,
-        worldZ + 5.5,
-        3,
-        towerHeight,
-        1
-    );
-
-
-    // Door collision is intentionally NOT
-    // added yet because the door starts open
-    // to the interior.
-
-    return lighthouse;
-}
-
 createLighthouse();
 
 // ========================================
@@ -1031,6 +879,15 @@ function createDock() {
         plank.position.z = i * 3;
 
         dock.add(plank);
+
+        addCollisionBox(
+            -18,
+            0.2,
+            20 + i * 3,
+            2.8,
+            0.35,
+            3
+        );
     }
 
 
@@ -1149,6 +1006,15 @@ function createTree(x, z, scale = 1) {
     tree.scale.setScalar(scale);
 
     scene.add(tree);
+
+    addCollisionBox(
+    x,
+    4 * scale,
+    z,
+    1.2 * scale,
+    8 * scale,
+    1.2 * scale
+);
 }
 
 
@@ -1392,20 +1258,35 @@ function updatePlayer(delta) {
 
         // Try X movement
 
-        camera.position.x += moveX;
+camera.position.x += moveX;
 
-        if (checkPlayerCollision()) {
-            camera.position.x -= moveX;
-        }
+if (checkPlayerCollision() || checkLighthouseCollision(camera.position.x, camera.position.z)) {
+    camera.position.x -= moveX;
+}
 
 
         // Try Z movement
 
         camera.position.z += moveZ;
 
-        if (checkPlayerCollision()) {
+        if (checkPlayerCollision() || checkLighthouseCollision(camera.position.x, camera.position.z)) {
             camera.position.z -= moveZ;
         }
+    }
+
+    function checkLighthouseCollision(x, z) {
+        const lighthouseX = -10;
+        const lighthouseZ = -12;
+
+        const lighthouseRadius = 6;
+        const playerRadius = 0.45;
+
+        const dx = x - lighthouseX;
+        const dz = z - lighthouseZ;
+
+        const distance = Math.sqrt(dx * dx + dz * dz);
+
+        return distance < lighthouseRadius + playerRadius;
     }
 
 
