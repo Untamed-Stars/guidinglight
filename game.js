@@ -327,17 +327,6 @@ function createLighthouse() {
     lighthouse.add(base);
 
 
-    // Collision around the base
-    addCollisionBox(
-        -10,
-        0.75,
-        -12,
-        15.5,
-        1.5,
-        15.5
-    );
-
-
     // ========================================
     // TOWER WALLS
     // ========================================
@@ -1461,6 +1450,20 @@ function updatePlayer(delta) {
 
     camera.rotation.x =
         pitch;
+}
+
+function animate() {
+
+    requestAnimationFrame(animate);
+
+    const delta = clock.getDelta();
+
+    updatePlayer(delta);
+
+    renderer.render(
+        scene,
+        camera
+    );
 }
 
 animate();
