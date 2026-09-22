@@ -1347,13 +1347,12 @@ function checkPlayerCollision() {
     return false;
 }
 
+const clock = new THREE.Clock();
+
 function updatePlayer(delta) {
 
     const direction =
         new THREE.Vector3();
-
-
-const clock = new THREE.Clock();
 
 
     // ========================================
@@ -1403,21 +1402,19 @@ const clock = new THREE.Clock();
 
 
         // Try X movement
+
         camera.position.x += moveX;
 
-        if (
-            checkPlayerCollision()
-        ) {
+        if (checkPlayerCollision()) {
             camera.position.x -= moveX;
         }
 
 
         // Try Z movement
+
         camera.position.z += moveZ;
 
-        if (
-            checkPlayerCollision()
-        ) {
+        if (checkPlayerCollision()) {
             camera.position.z -= moveZ;
         }
     }
@@ -1434,7 +1431,10 @@ const clock = new THREE.Clock();
         player.velocityY * delta;
 
 
-    // Ground
+    // ========================================
+    // GROUND
+    // ========================================
+
     if (
         camera.position.y <=
         player.height
@@ -1461,28 +1461,6 @@ const clock = new THREE.Clock();
 
     camera.rotation.x =
         pitch;
-}
-
-
-// ========================================
-// GAME LOOP
-// ========================================
-
-function animate() {
-
-    requestAnimationFrame(animate);
-
-    const delta = Math.min(
-        clock.getDelta(),
-        0.05
-    );
-
-    updatePlayer(delta);
-
-    renderer.render(
-        scene,
-        camera
-    );
 }
 
 animate();
